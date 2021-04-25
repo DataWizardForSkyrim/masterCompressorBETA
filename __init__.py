@@ -328,6 +328,8 @@ def newdictfunc(keynumv, keylistv, modvar, cleanblockhst):
 	return newdict
 
 
+# TODO: BUG HERE, mode char printing out wrong WHEN mode values appear AFTER first char in raw item
+# I THINK I FIXED IT GOOD. I cant see how it might make mistakes again so only need some confirmation bias
 def mcitemblock(cleanblkhst, mvar, amvar, mstrings):
 	mone = mstrings[0]  # finds location of mode or altmode in each item
 	mtwo = mstrings[1]  # replaces mode chars with respective mode char
@@ -338,13 +340,27 @@ def mcitemblock(cleanblkhst, mvar, amvar, mstrings):
 		elif i == amvar:
 			compitem = mtwo
 		elif mvar in i:
-			endind = len(mvar)# - 1
-			raw = i[endind:]    # TODO:: is this only accounting for mode being first in the data set?
-			compitem = mone + raw   # I think I might need a b4 ind w/ a endind and a try statement
+			m_ind = i.find(mvar)
+			if m_ind > 0:
+				raw = i[:m_ind]
+				compitem = raw + mone
+			else:
+				raw = i[len(mvar):]
+				compitem = mone + raw
+			#endind = len(mvar)# - 1
+			#raw = i[endind:]    # TODO:: is this only accounting for mode being first in the data set?
+			#compitem = mone + raw   # I think I might need a b4 ind w/ a endind and a try statement
 		elif amvar in i:
-			endind = len(amvar)# - 1
-			raw = i[endind:]
-			compitem = mtwo + raw
+			m_ind = i.find(amvar)
+			if m_ind > 0:
+				raw = i[:m_ind]
+				compitem = raw + mtwo
+			else:
+				raw = i[len(amvar):]
+				compitem = mtwo + raw
+			#endind = len(amvar)# - 1
+			#raw = i[endind:]
+			#compitem = mtwo + raw
 		else:
 			compitem = i
 		newlist.append(compitem)
@@ -490,5 +506,19 @@ two2onedict = {
 	'70': 'K', '71': 'L', '72': 'M', '73': 'N', '74': 'O', '75': 'P', '76': 'Q', '77': 'R', '78': 'S', '79': 'T',
 	'80': 'U', '81': 'V', '82': 'W', '83': 'X', '84': 'Y', '85': 'Z', '86': 'a', '87': 'b', '88': 'c', '89': 'd',
 	'90': 'e', '91': 'f', '92': 'g', '93': 'h', '94': 'i', '95': 'j', '96': 'k', '97': 'l', '98': 'm', '99': 'n'
+}
+
+
+inverse2to1 = {
+	'À': '00', 'Á': '01', 'Â': '02', 'Ã': '03', 'Ä': '04', 'Å': '05', 'Æ': '06', 'Ç': '07', 'È': '08', 'É': '09',
+	'Ê': '10', 'Ë': '11', 'Ì': '12', 'Í': '13', 'Î': '14', 'Ï': '15', 'Ð': '16', 'Ñ': '17', 'Ò': '18', 'Ó': '19',
+	'Ô': '20', 'Õ': '21', 'Ö': '22', 'Ø': '23', 'Ù': '24', 'Ú': '25', 'Û': '26', 'Ü': '27', 'Ý': '28', 'ß': '29',
+	'à': '30', 'á': '31', 'â': '32', 'ã': '33', 'ä': '34', 'å': '35', 'ç': '36', 'è': '37', 'é': '38', 'ê': '39',
+	'ë': '40', 'ì': '41', 'í': '42', 'î': '43', 'ï': '44', 'ð': '45', 'ñ': '46', 'ò': '47', 'ó': '48', 'ô': '49',
+	'õ': '50', 'ö': '51', 'ø': '52', 'ù': '53', 'ú': '54', 'û': '55', 'ü': '56', 'ý': '57', 'þ': '58', 'ÿ': '59',
+	'A': '60', 'B': '61', 'C': '62', 'D': '63', 'E': '64', 'F': '65', 'G': '66', 'H': '67', 'I': '68', 'J': '69',
+	'K': '70', 'L': '71', 'M': '72', 'N': '73', 'O': '74', 'P': '75', 'Q': '76', 'R': '77', 'S': '78', 'T': '79',
+	'U': '80', 'V': '81', 'W': '82', 'X': '83', 'Y': '84', 'Z': '85', 'a': '86', 'b': '87', 'c': '88', 'd': '89',
+	'e': '90', 'f': '91', 'g': '92', 'h': '93', 'i': '94', 'j': '95', 'k': '96', 'l': '97', 'm': '98', 'n': '99'
 }
 
